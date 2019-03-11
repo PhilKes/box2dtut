@@ -61,11 +61,11 @@ public class LoadingScreen implements Screen {
 				
 		// get images used to display loading progress
 		atlas = parent.assMan.manager.get("images/loading.atlas");
-		title = atlas.findRegion("staying-alight-logo");
+		title = atlas.findRegion("logo");
 		dash = atlas.findRegion("loading-dash");
-		background = atlas.findRegion("flamebackground");
+		background = atlas.findRegion("background");
 		copyright = atlas.findRegion("copyright");
-		flameAnimation = new Animation(0.07f, atlas.findRegions("flames/flames"), PlayMode.LOOP);
+		flameAnimation = new Animation(0.07f, atlas.findRegions("loadItem"), PlayMode.LOOP);
 		
 	}
 
@@ -77,7 +77,7 @@ public class LoadingScreen implements Screen {
 
 		table = new Table();
 		table.setFillParent(true);
-		table.setDebug(false);
+		//table.setDebug(true);
 		table.setBackground(new TiledDrawable(background));
 		
 		loadingTable = new Table();
@@ -146,7 +146,7 @@ public class LoadingScreen implements Screen {
         }
 		
 		stage.act();
-		//stage.draw();
+		stage.draw();
 	}
 
 	@Override
@@ -183,8 +183,8 @@ public class LoadingScreen implements Screen {
 			super();
 			image = ar;
 			flameAnimation = an;
-			this.setWidth(30);
-			this.setHeight(25);
+			this.setWidth(39);
+			this.setHeight(39);
 			this.setVisible(false);
 			//this.debug();
 		}
@@ -192,9 +192,9 @@ public class LoadingScreen implements Screen {
 		@Override
 		public void draw(Batch batch, float parentAlpha) {
 			super.draw(batch, parentAlpha);
-			batch.draw(image, getX(),getY(), 30, 30);
+			batch.draw(image, getX(),getY(), 39, 39);
 			batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-			batch.draw(currentFrame, getX()-5,getY(), 40, 40);
+			batch.draw(currentFrame, getX(),getY(), 39, 39);
 			batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
 		}

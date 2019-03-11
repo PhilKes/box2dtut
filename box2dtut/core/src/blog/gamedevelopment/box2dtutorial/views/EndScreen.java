@@ -36,7 +36,7 @@ public class EndScreen implements Screen {
 		// get skin
 		skin = parent.assMan.manager.get("skin/glassy-ui.json");
 		atlas = parent.assMan.manager.get("images/loading.atlas");
-		background = atlas.findRegion("flamebackground");
+		background = atlas.findRegion("background");
 		
 		// create button to go back to manu
 		TextButton menuButton = new TextButton("Back", skin, "small");
@@ -61,23 +61,19 @@ public class EndScreen implements Screen {
         table.setBackground(new TiledDrawable(background));
 		
 		//create a Labels showing the score and some credits
-		Label labelScore = new Label("You score was "+parent.lastScore+" Meters", skin);
-		Label labelCredits = new Label("Credits:", skin);
-		Label labelCredits1 = new Label("Game Design by", skin);
-		Label labelCredits2 = new Label("gamedevelopment.blog", skin);
-		Label labelCredits3 = new Label("Art Design by", skin);
-		Label labelCredits4 = new Label("Random stuff off the internet", skin);
+		Label labelScore = new Label("Your Score", skin);
+		Label labelHeight = new Label("Height:\t"+parent.lastScore+" Meters", skin);
+		Label labelBaskets = new Label("Baskets:\t"+parent.baskets, skin);
+		Label labelTotal = new Label("Total Score\n"+(parent.lastScore+parent.baskets*10), skin);
 		
 		// add items to table
 		table.add(labelScore).colspan(2);
 		table.row().padTop(10);
-		table.add(labelCredits).colspan(2);
+		table.add(labelHeight).colspan(2).left();
 		table.row().padTop(10);
-		table.add(labelCredits1).uniformX().align(Align.left);
-		table.add(labelCredits2).uniformX().align(Align.left);
-		table.row().padTop(10);
-		table.add(labelCredits3).uniformX().align(Align.left);
-		table.add(labelCredits4).uniformX().align(Align.left);
+		table.add(labelBaskets).colspan(2).left();
+		table.row().padTop(20);
+		table.add(labelTotal).colspan(2).fillX().center();
 		table.row().padTop(50);
 		table.add(menuButton).colspan(2);
 		

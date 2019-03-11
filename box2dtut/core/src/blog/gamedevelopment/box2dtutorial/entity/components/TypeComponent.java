@@ -12,7 +12,9 @@ public class TypeComponent implements Component, Poolable {
 	public static final int OTHER = 4;
 	public static final int SPRING = 5;
 	public static final int BULLET = 6;
-	
+	public static final int BASKET=7;
+	public static final int PLATFORM=8;
+	public static final int BOARD=9;
 	public int type = OTHER;
 
 	@Override

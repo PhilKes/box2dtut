@@ -10,12 +10,12 @@ public class EnemyComponent implements Component, Poolable{
 	public boolean isDead = false;
 	public float xPosCenter = -1;
 	public boolean isGoingLeft = false;
-	public float shootDelay = 2f;
+	public float shootDelay = 1.5f;
 	public float timeSinceLastShot = 0f;
 	public Type enemyType = Type.DROPLET;
 	@Override
 	public void reset() {
-		shootDelay = 2f;
+		shootDelay = 0.5f;
 		timeSinceLastShot = 0f;
 		enemyType = Type.DROPLET;
 		isDead = false;

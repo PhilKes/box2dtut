@@ -10,6 +10,8 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -22,6 +24,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     public static final float PPM = 16.0f;
     static final float FRUSTUM_WIDTH = Gdx.graphics.getWidth()/PPM;//37.5f;
     static final float FRUSTUM_HEIGHT = Gdx.graphics.getHeight()/PPM;//.0f;
+    TextureRegion background;
 
     public static final float PIXELS_TO_METRES = 1.0f / PPM;
 
@@ -51,12 +54,13 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TransformComponent> transformM;
 
     @SuppressWarnings("unchecked")
-	public RenderingSystem(SpriteBatch batch) {
+	public RenderingSystem(SpriteBatch batch, TextureAtlas loading) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
 
+        background=loading.findRegion("background");
         renderQueue = new Array<Entity>();
 
         this.batch = batch;
@@ -72,35 +76,44 @@ public class RenderingSystem extends SortedIteratingSystem {
         super.update(deltaTime);
 
         renderQueue.sort(comparator);
-        
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         batch.enableBlending();
+
         if(shouldRender){
 	        batch.begin();
-	
-	        for (Entity entity : renderQueue) {
-	            TextureComponent tex = textureM.get(entity);
-	            TransformComponent t = transformM.get(entity);
-	
-	            if (tex.region == null || t.isHidden) {
-	                continue;
-	            }
+            batch.draw(background, cam.position.x -Gdx.graphics.getWidth()/2 , cam.position.y-Gdx.graphics.getHeight()/2,
+                    Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                for(Entity entity : renderQueue) {
+                    TextureComponent tex=textureM.get(entity);
+                    TransformComponent t=transformM.get(entity);
+                    TextureRegion tR=tex.region;
+                        if(tR==null || t.isHidden) {
+                            continue;
+                        }
 
-	            float width = tex.region.getRegionWidth();
-	            float height = tex.region.getRegionHeight();
-	
-	            float originX = width/2f;
-	            float originY = height/2f;
-	
-	            batch.draw(tex.region,
-	                    t.position.x - originX + tex.offsetX, 
-	                    t.position.y - originY + tex.offsetY,
-	                    originX, originY,
-	                    width, height,
-	                    PixelsToMeters(t.scale.x), PixelsToMeters(t.scale.y),
-	                    t.rotation);
-	        }
+                        float width=t.width;
+                        float height=t.height;
+
+                        float originX=width / 2f;
+                        float originY=height / 2f;
+
+                        batch.draw(tR,
+                                t.position.x - originX, t.position.y - originY,
+                                originX, originY,
+                                t.width, t.height,
+                                t.scale.x, t.scale.y,
+                                t.rotation);
+                        /** OLD
+                         * batch.draw(tex.region,
+                         *                     t.position.x - originX, t.position.y - originY,
+                         *                     originX, originY,
+                         *                     width, height,
+                         *                     PixelsToMeters(t.scale.x), PixelsToMeters(t.scale.y),
+                         *                     t.rotation);
+                         */
+                    }
+
 	        batch.end();
         }
         renderQueue.clear();

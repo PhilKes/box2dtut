@@ -9,16 +9,15 @@ import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class SteeringComponent implements Steerable<Vector2>, Component, Poolable{
+public class SteeringComponent implements Steerable<Vector2>, Component {
 
-	public static enum SteeringState {WANDER,SEEK,FLEE,ARRIVE,NONE} 	// a list of possible behaviours 
+	public static enum SteeringState {WANDER,SEEK,FLEE,ARRIVE} 	// a list of possible behaviours 
 	public SteeringState currentMode = SteeringState.WANDER; 	// stores which state the entity is currently in
 	public Body body;	// stores a reference to our Box2D body
 	
 	// Steering data
-	float maxLinearSpeed = 1.5f;	// stores the max speed the entity can go
+	float maxLinearSpeed = 2f;	// stores the max speed the entity can go
 	float maxLinearAcceleration = 5f;	// stores the max acceleration
 	float maxAngularSpeed =50f;		// the max turning speed
 	float maxAngularAcceleration = 5f;// the max turning acceleration
@@ -28,15 +27,7 @@ public class SteeringComponent implements Steerable<Vector2>, Component, Poolabl
 	private static final SteeringAcceleration<Vector2> steeringOutput = new SteeringAcceleration<Vector2>(new Vector2()); // this is the actual steering vactor for our unit
 	private float boundingRadius = 1f;   // the minimum radius size for a circle required to cover whole object
 	private boolean tagged = true;		// This is a generic flag utilized in a variety of ways. (never used this myself)
-	private boolean independentFacing = true; // defines if the entity can move in a direction other than the way it faces)
-	
-	@Override
-	public void reset() {
-		currentMode = SteeringState.NONE;
-		body = null;
-		steeringBehavior = null;
-		
-	}
+	private boolean independentFacing = false; // defines if the entity can move in a direction other than the way it faces)
 	
 	public boolean isIndependentFacing () {
 		return independentFacing;
@@ -76,7 +67,6 @@ public class SteeringComponent implements Steerable<Vector2>, Component, Poolabl
 				// this method internally scales the torque by deltaTime
 				body.applyTorque(steeringOutput.angular, true);
 				anyAccelerations = true;
-		
 			}
 		} else {
 			// If we haven't got any velocity, then we can do nothing.

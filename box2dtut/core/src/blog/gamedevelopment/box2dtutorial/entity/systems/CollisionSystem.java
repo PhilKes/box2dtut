@@ -1,27 +1,28 @@
 package blog.gamedevelopment.box2dtutorial.entity.systems;
 
-import blog.gamedevelopment.box2dtutorial.entity.components.BulletComponent;
-import blog.gamedevelopment.box2dtutorial.entity.components.CollisionComponent;
-import blog.gamedevelopment.box2dtutorial.entity.components.EnemyComponent;
-import blog.gamedevelopment.box2dtutorial.entity.components.Mapper;
-import blog.gamedevelopment.box2dtutorial.entity.components.PlayerComponent;
-import blog.gamedevelopment.box2dtutorial.entity.components.TypeComponent;
+import blog.gamedevelopment.box2dtutorial.entity.components.*;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.audio.Sound;
 
 public class CollisionSystem  extends IteratingSystem {
-	 ComponentMapper<CollisionComponent> cm;
+	private final Sound soundBoard;
+	private final Sound soundSwish;
+	ComponentMapper<CollisionComponent> cm;
 	 ComponentMapper<PlayerComponent> pm;
+	 ComponentMapper<StateComponent> sm;
 
 	@SuppressWarnings("unchecked")
-	public CollisionSystem() {
+	public CollisionSystem(Sound soundBoard,Sound soundSwish) {
 		super(Family.all(CollisionComponent.class).get());
-		
+		this.soundBoard=soundBoard;
+		this.soundSwish=soundSwish;
 		 cm = ComponentMapper.getFor(CollisionComponent.class);
 		 pm = ComponentMapper.getFor(PlayerComponent.class);
+		 sm=ComponentMapper.getFor(StateComponent.class);
 	}
 
 	@Override
@@ -30,8 +31,8 @@ public class CollisionSystem  extends IteratingSystem {
 		CollisionComponent cc = cm.get(entity);
 		//get collided entity
 		Entity collidedEntity = cc.collisionEntity;
-		
 		TypeComponent thisType = entity.getComponent(TypeComponent.class);
+		TransformComponent thisTrans=entity.getComponent(TransformComponent.class);
 		
 		// Do Player Collisions
 		if(thisType.type == TypeComponent.PLAYER){
@@ -52,15 +53,48 @@ public class CollisionSystem  extends IteratingSystem {
 						pm.get(entity).onPlatform = true;
 						System.out.println("player hit scenery");
 						break;
+					case TypeComponent.PLATFORM:
+						//do player hit scenery thing
+						TransformComponent platTrans=collidedEntity.getComponent(TransformComponent.class);
+						if(thisTrans.position.y>platTrans.position.y) {
+							pm.get(entity).onPlatform=true;
+							System.out.println("player hit scenery");
+						}
+						break;
 					case TypeComponent.SPRING:
 						//do player hit other thing
-						pm.get(entity).onSpring = true;
-						System.out.println("player hit spring: bounce up");
+						TransformComponent springTrans=collidedEntity.getComponent(TransformComponent.class);
+						if(thisTrans.position.y>springTrans.position.y) {
+							pm.get(entity).onSpring=true;
+							StateComponent state=sm.get(collidedEntity);
+							state.set(StateComponent.STATE_JUMPING);
+							System.out.println("player hit spring: bounce up");
+						}
 						break;	
 					case TypeComponent.OTHER:
 						//do player hit other thing
 						System.out.println("player hit other");
-						break; 
+						break;
+					case TypeComponent.BASKET:
+						TransformComponent basketTrans=collidedEntity.getComponent(TransformComponent.class);
+						if(thisTrans.position.y>basketTrans.position.y) {
+							System.out.println("SCORE");
+							pl.hasScored=true;
+							soundSwish.play();
+							StateComponent state2=sm.get(collidedEntity);
+							state2.set(StateComponent.STATE_HIT);
+						}
+						break;
+					case TypeComponent.BOARD:
+						/*TransformComponent boardTrans=collidedEntity.getComponent(TransformComponent.class);
+						if(thisTrans.position.y>boardTrans.position.y) {
+							System.out.println("SCORE");
+							StateComponent state2=sm.get(collidedEntity);
+							state2.set(StateComponent.STATE_HIT);
+						}*/
+						pm.get(entity).onPlatform=true;
+						soundBoard.play();
+						break;
 					case TypeComponent.BULLET:
 						// TODO add mask so player can't hit themselves
 						BulletComponent bullet = Mapper.bulletCom.get(collidedEntity);
@@ -96,7 +130,8 @@ public class CollisionSystem  extends IteratingSystem {
 						break;	
 					case TypeComponent.OTHER:
 						System.out.println("enemy hit other");
-						break; 
+						break;
+
 					case TypeComponent.BULLET:
 						EnemyComponent enemy = Mapper.enemyCom.get(entity);
 						BulletComponent bullet = Mapper.bulletCom.get(collidedEntity);

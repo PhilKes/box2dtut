@@ -5,21 +5,20 @@ import blog.gamedevelopment.box2dtutorial.Box2DTutorial;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class PreferencesScreen implements Screen{
 
+	private final TextureAtlas atlas;
+	private final TextureAtlas.AtlasRegion background;
 	private Box2DTutorial parent;
 	private Stage stage;
 	private Label titleLabel;
@@ -33,6 +32,8 @@ public class PreferencesScreen implements Screen{
 		parent = box2dTutorial;
 		/// create stage and set it as input processor
 		stage = new Stage(new ScreenViewport());
+		atlas = parent.assMan.manager.get("images/loading.atlas");
+		background = atlas.findRegion("background");
 		
 	}
 
@@ -40,15 +41,13 @@ public class PreferencesScreen implements Screen{
 	public void show() {
 		stage.clear();
 		Gdx.input.setInputProcessor(stage);
-		
-		// Create a table that fills the screen. Everything else will go inside
-		// this table.
+
 		Table table = new Table();
 		table.setFillParent(true);
+		table.setBackground(new TiledDrawable(background));
 		//table.setDebug(true);
 		stage.addActor(table);
 
-		// temporary until we have asset manager in
 		Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 
 		// music volume

@@ -78,7 +78,10 @@ public class BodyFactory {
 
 		return boxBody;
 	}
-	
+	public boolean removeBody(Body body){
+		world.destroyBody(body);
+		return true;
+	}
 	public Body makeCirclePolyBody(float posx, float posy, float radius, int material){
 		return makeCirclePolyBody( posx,  posy,  radius,  material,  BodyType.DynamicBody,  false);
 	}
@@ -148,8 +151,8 @@ public class BodyFactory {
 			break;
 		case RUBBER:
 			fixtureDef.density = 1f;
-			fixtureDef.friction = 0f;
-			fixtureDef.restitution = 1f;
+			fixtureDef.friction = 0.3f;
+			fixtureDef.restitution = .4f;
 			break;
 		case STONE:
 			fixtureDef.density = 1f;

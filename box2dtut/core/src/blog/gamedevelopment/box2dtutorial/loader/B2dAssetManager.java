@@ -3,18 +3,19 @@ package blog.gamedevelopment.box2dtutorial.loader;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
-import com.badlogic.gdx.assets.loaders.ParticleEffectLoader.ParticleEffectParameter;
 
 public class B2dAssetManager {
 	
 	public final AssetManager manager = new AssetManager();
 
 	// Sounds
-	public final String boingSound = "sounds/boing.wav";
+	public static final String SOUND_BOING= "sounds/boing.wav",
+						SOUND_JUMP= "sounds/jump.mp3",
+						SOUND_BOARD= "sounds/backboard.wav",
+						SOUND_SWISH= "sounds/swish.wav";
 	public final String pingSound = "sounds/ping.wav";
 	
 	// Music
@@ -36,12 +37,12 @@ public class B2dAssetManager {
 		
 	}
 	
-	public void queueAddParticleEffects(){
+	public void queueAddParticleEffects(){/*
 		ParticleEffectParameter pep = new ParticleEffectParameter();
 		pep.atlasFile = "images/game.atlas";
 		manager.load(smokeEffect, ParticleEffect.class, pep);
 		manager.load(waterEffect, ParticleEffect.class, pep);
-		manager.load(fireEffect, ParticleEffect.class, pep);
+		manager.load(fireEffect, ParticleEffect.class, pep);*/
 	}
 	
 	public void queueAddImages(){
@@ -64,7 +65,10 @@ public class B2dAssetManager {
 	}
 	
 	public void queueAddSounds(){
-		manager.load(boingSound, Sound.class);
+		manager.load(SOUND_BOING, Sound.class);
 		manager.load(pingSound, Sound.class);
+		manager.load(SOUND_JUMP,Sound.class);
+		manager.load(SOUND_SWISH,Sound.class);
+		manager.load(SOUND_BOARD,Sound.class);
 	}
 }

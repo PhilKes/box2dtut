@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,7 +22,7 @@ public class MenuScreen implements Screen{
 	private Stage stage;
 	private Skin skin;
 	private TextureAtlas atlas;
-	private AtlasRegion background;
+	private AtlasRegion background,logo;
 	
 	public MenuScreen(Box2DTutorial box2dTutorial){
 		parent = box2dTutorial;
@@ -32,33 +33,27 @@ public class MenuScreen implements Screen{
 		parent.assMan.manager.finishLoading();
 		skin = parent.assMan.manager.get("skin/glassy-ui.json");
 		atlas = parent.assMan.manager.get("images/loading.atlas");
-		background = atlas.findRegion("flamebackground");
-		
+		background = atlas.findRegion("background");
+		logo = atlas.findRegion("logo");
 	}
 
 	@Override
 	public void show() {
-		// debug to skip menu
-		//DFUtils.log("To the game");
-		//parent.changeScreen(Box2DTutorial.APPLICATION);
-		
-		
-		Gdx.input.setInputProcessor(stage); 
-		// Create a table that fills the screen. Everything else will go inside this table.
+		Gdx.input.setInputProcessor(stage);
 		Table table = new Table();
 		table.setFillParent(true);
-        table.setDebug(true);
+        //table.setDebug(true);
         stage.addActor(table);
         
     	table.setBackground(new TiledDrawable(background));
-        
-        
         //create buttons
         TextButton newGame = new TextButton("New Game", skin);
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
         
         //add buttons to table
+		table.add(new Image(logo)).uniformX();
+		table.row();
         table.add(newGame).fillX().uniformX();
 		table.row().pad(10, 0, 10, 0);
 		table.add(preferences).fillX().uniformX();
@@ -98,25 +93,30 @@ public class MenuScreen implements Screen{
 		// tell our stage to do actions and draw itself
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-		
-		// temp debug stuff(ignore menu  go straight to play..saves time)
-		//parent.changeScreen(Box2DTutorial.APPLICATION);	
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// change the stage's viewport when the screen size is changed
 		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
-	public void pause() {}
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void resume() {}
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void hide() {}
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void dispose() {

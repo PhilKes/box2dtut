@@ -1,6 +1,5 @@
 package blog.gamedevelopment.box2dtutorial.entity.systems;
 
-import blog.gamedevelopment.box2dtutorial.LevelFactory;
 import blog.gamedevelopment.box2dtutorial.entity.components.B2dBodyComponent;
 import blog.gamedevelopment.box2dtutorial.entity.components.BulletComponent;
 import blog.gamedevelopment.box2dtutorial.entity.components.Mapper;
@@ -10,12 +9,12 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 
 public class BulletSystem extends IteratingSystem{
-	private LevelFactory lvlFactory;
+	private Entity player;
 	
 	@SuppressWarnings("unchecked")
-	public BulletSystem(LevelFactory lvlFactory){
+	public BulletSystem(Entity player){
 		super(Family.all(BulletComponent.class).get());
-		this.lvlFactory = lvlFactory;
+		this.player = player;
 	}
 
 	@Override
@@ -28,7 +27,7 @@ public class BulletSystem extends IteratingSystem{
 		b2body.body.setLinearVelocity(bullet.xVel, bullet.yVel);
 		
 		// get player pos
-		B2dBodyComponent playerBodyComp = Mapper.b2dCom.get(lvlFactory.player); 
+		B2dBodyComponent playerBodyComp = Mapper.b2dCom.get(player); 
 		float px = playerBodyComp.body.getPosition().x;
 		float py = playerBodyComp.body.getPosition().y;
 		

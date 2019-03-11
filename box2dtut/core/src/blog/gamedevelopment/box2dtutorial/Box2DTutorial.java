@@ -10,18 +10,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
 
 public class Box2DTutorial extends Game {
-	
-	//TODO PART DONE(-clamp) add walls on side to stop player going too far (clamp)
-	//TODO PART DONE add enemy and enemy generation
-	//TODO add obstacles
-	//DONE add boosts
-	//DONE(not pretty yet) add water that moves up at speed to encourage player to go faster
-	//TODO add remove body from world code
-	//TODO remove items off screen
-	//TODO make enemies die if shot and fall offscreen(off screen should remove from abouve task)
-	
-	
-	
+
 	private LoadingScreen loadingScreen;
 	private PreferencesScreen preferencesScreen;
 	private MenuScreen menuScreen;
@@ -37,21 +26,19 @@ public class Box2DTutorial extends Game {
 	public final static int ENDGAME = 3;
 	
 	public int lastScore = 0;
+	public int baskets=0;
 	
 	@Override
 	public void create () {
 		loadingScreen = new LoadingScreen(this);
 		preferences = new AppPreferences();
 		setScreen(loadingScreen);
-		
-		// tells our asset manger that we want to load the images set in loadImages method
+
 		assMan.queueAddMusic();
+
 		// tells the asset manager to load the images and wait until finished loading.
 		assMan.manager.finishLoading();
-		// loads the 2 sounds we use
 		playingSong = assMan.manager.get("music/Rolemusic_-_pl4y1ng.mp3");
-		
-		//playingSong.play();
 		
 	}
 	
@@ -67,12 +54,7 @@ public class Box2DTutorial extends Game {
 				break;
 			case APPLICATION:
 				// always make new game screen so game can't start midway
-				if(mainScreen == null){
-					mainScreen = new MainScreen(this);
-				}else{
-					mainScreen.resetWorld();
-				}
-				
+				mainScreen = new MainScreen(this);
 				this.setScreen(mainScreen);
 				break;
 			case ENDGAME:
