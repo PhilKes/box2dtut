@@ -18,6 +18,7 @@ public class SpringSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(StateComponent.class);
     }
 
+    /** Reset animation and state if Spring is used */
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         StateComponent state=sm.get(entity);

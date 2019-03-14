@@ -9,6 +9,7 @@ import blog.gamedevelopment.box2dtutorial.views.PreferencesScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
 
+/**  Main Game class showing Screens */
 public class Box2DTutorial extends Game {
 
 	private LoadingScreen loadingScreen;
@@ -41,7 +42,7 @@ public class Box2DTutorial extends Game {
 		playingSong = assMan.manager.get("music/Rolemusic_-_pl4y1ng.mp3");
 		
 	}
-	
+
 	public void changeScreen(int screen){
 		switch(screen){
 			case MENU:

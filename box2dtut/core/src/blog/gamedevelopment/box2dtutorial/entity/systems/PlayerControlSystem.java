@@ -38,6 +38,7 @@ public class PlayerControlSystem extends IteratingSystem{
 		bodm = ComponentMapper.getFor(B2dBodyComponent.class);
 		sm = ComponentMapper.getFor(StateComponent.class);
 	}
+	/** Reacts upon Player input and updates state,velocity of Player */
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		B2dBodyComponent b2body = bodm.get(entity);
@@ -59,7 +60,7 @@ public class PlayerControlSystem extends IteratingSystem{
 			}
 		}
 		
-		// make player teleport higher
+		/** Make Player jump if on Spring */
 		if(player.onSpring){
 			b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,0);
 			b2body.body.applyLinearImpulse(0, 100f, b2body.body.getWorldCenter().x,b2body.body.getWorldCenter().y, true);
@@ -67,12 +68,12 @@ public class PlayerControlSystem extends IteratingSystem{
 			//lvlFactory.makeParticleEffect(ParticleEffectManager.SMOKE, b2body.body.getPosition().x, b2body.body.getPosition().y);
 			// move player
 			//b2body.body.setTransform(b2body.body.getPosition().x, b2body.body.getPosition().y+ 10, b2body.body.getAngle());
-			//state.set(StateComponent.STATE_JUMPING);
+			state.set(StateComponent.STATE_JUMPING);
 			soundJump.play();
 			player.onSpring = false;
 		}
 		
-		
+		/** Move Controls */
 		if(controller.left){
 			b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, -7f, 0.2f),b2body.body.getLinearVelocity().y);
 /*			if(b2body.body.getLinearVelocity().x-.5f>=MAX_SPEED)
@@ -92,7 +93,8 @@ public class PlayerControlSystem extends IteratingSystem{
 			b2body.body.setLinearVelocity(MathUtils.lerp(b2body.body.getLinearVelocity().x, 0, 0.1f),b2body.body.getLinearVelocity().y);
 			b2body.body.applyAngularImpulse(-1*b2body.body.getAngularVelocity()/50000,true);
 		}
-		
+
+		/** Jump */
 		if(controller.up && 
 				(state.get() == StateComponent.STATE_NORMAL || state.get() == StateComponent.STATE_MOVING)){
 			b2body.body.applyLinearImpulse(0, 16f * b2body.body.getMass() , b2body.body.getWorldCenter().x,b2body.body.getWorldCenter().y, true);
@@ -105,9 +107,9 @@ public class PlayerControlSystem extends IteratingSystem{
 			b2body.body.applyLinearImpulse(0, -5f, b2body.body.getWorldCenter().x,b2body.body.getWorldCenter().y, true);
 		}
 		
-		if(player.timeSinceLastShot > 0){
+	/*	if(player.timeSinceLastShot > 0){
 			player.timeSinceLastShot -= deltaTime;
-		}
+		}*/
 		
 		/*if(controller.isMouse1Down){ // if mouse button is pressed
 			//System.out.println(player.timeSinceLastShot+" ls:sd "+player.shootDelay);

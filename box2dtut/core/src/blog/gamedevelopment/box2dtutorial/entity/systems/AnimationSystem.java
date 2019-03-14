@@ -26,6 +26,7 @@ public class AnimationSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(StateComponent.class);
     }
 
+    /** Sets Entity's texture to current Frame of Animation */
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 

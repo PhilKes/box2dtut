@@ -25,6 +25,7 @@ public class CollisionSystem  extends IteratingSystem {
 		 sm=ComponentMapper.getFor(StateComponent.class);
 	}
 
+	/** Handles Collision between two Entitys based on their types */
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		// get collision for this entity
@@ -34,7 +35,7 @@ public class CollisionSystem  extends IteratingSystem {
 		TypeComponent thisType = entity.getComponent(TypeComponent.class);
 		TransformComponent thisTrans=entity.getComponent(TransformComponent.class);
 		
-		// Do Player Collisions
+		/** Player Collisions */
 		if(thisType.type == TypeComponent.PLAYER){
 			PlayerComponent pl = pm.get(entity);
 			if(collidedEntity != null){
@@ -111,7 +112,8 @@ public class CollisionSystem  extends IteratingSystem {
 					System.out.println("Player: collidedEntity.type == null");
 				}
 			}
-		}else if(thisType.type == TypeComponent.ENEMY){  	// Do enemy collisions
+		}/** Enemy Collision */
+		else if(thisType.type == TypeComponent.ENEMY){
 			if(collidedEntity != null){
 				TypeComponent type = collidedEntity.getComponent(TypeComponent.class);
 				if(type != null){

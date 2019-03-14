@@ -19,6 +19,7 @@ public class WaterFloorSystem extends IteratingSystem {
 		this.player = player;
 	}
 
+	/** Player dies if he falls to far down */
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		// get current y level of player entity

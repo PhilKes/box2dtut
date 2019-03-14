@@ -37,6 +37,7 @@ public class MenuScreen implements Screen{
 		logo = atlas.findRegion("logo");
 	}
 
+	/** Shows MainMenu to start new Game,show Preferences,... */
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);

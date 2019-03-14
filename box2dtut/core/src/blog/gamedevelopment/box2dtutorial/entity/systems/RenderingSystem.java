@@ -71,6 +71,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         cam.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT / 2f, 0);
     }
 
+    /** Renders all entities (textures) in renderQueue (sorted by Z Position) */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);

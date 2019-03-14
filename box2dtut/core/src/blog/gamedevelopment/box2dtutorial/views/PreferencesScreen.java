@@ -36,7 +36,7 @@ public class PreferencesScreen implements Screen{
 		background = atlas.findRegion("background");
 		
 	}
-
+	/** Shows game options/audio options */
 	@Override
 	public void show() {
 		stage.clear();

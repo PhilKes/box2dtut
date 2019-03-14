@@ -22,6 +22,7 @@ public class PhysicsDebugSystem extends IteratingSystem {
         this.camera = camera;
     }
 
+    /** Renders Wireframe Debug info */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);

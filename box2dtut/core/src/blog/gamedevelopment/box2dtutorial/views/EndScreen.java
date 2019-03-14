@@ -30,7 +30,8 @@ public class EndScreen implements Screen {
 	public EndScreen(Box2DTutorial box2dTutorial){
 		parent = box2dTutorial;
 	}
-	
+
+	/** Shows Player score, button to go back to MainMenu */
 	@Override
 	public void show() {
 		// get skin
@@ -57,7 +58,7 @@ public class EndScreen implements Screen {
 		// create table to layout iutems we will add
 		Table table = new Table();
 		table.setFillParent(true);
-        table.setDebug(true);
+        //table.setDebug(true);
         table.setBackground(new TiledDrawable(background));
 		
 		//create a Labels showing the score and some credits

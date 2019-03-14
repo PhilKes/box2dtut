@@ -47,7 +47,8 @@ public class BodyFactory {
 	private BodyFactory(World world){
 		this.world = world;
 	}
-	
+
+	/** Util Factory to instantiate Objects in the Level */
 	public static BodyFactory getInstance(World world){
 		if(thisInstance == null){
 			thisInstance = new BodyFactory(world);

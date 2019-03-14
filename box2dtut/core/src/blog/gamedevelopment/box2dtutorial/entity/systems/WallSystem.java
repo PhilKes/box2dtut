@@ -19,6 +19,7 @@ public class WallSystem extends IteratingSystem{
 		this.player = player;
 	}
 
+	/** Prohibits player from leaving the Level area */
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		// get current y level of player entity

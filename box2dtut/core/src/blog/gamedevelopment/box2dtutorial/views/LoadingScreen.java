@@ -66,9 +66,9 @@ public class LoadingScreen implements Screen {
 		background = atlas.findRegion("background");
 		copyright = atlas.findRegion("copyright");
 		flameAnimation = new Animation(0.07f, atlas.findRegions("loadItem"), PlayMode.LOOP);
-		
 	}
 
+	/** Shows Loading Bar for individual assets being loaded in background */
 	@Override
 	public void show() {
 		

@@ -19,7 +19,8 @@ public class LevelGenerationSystem extends IteratingSystem {
 		super(Family.all(PlayerComponent.class).get());
 		lf = lvlFactory;
 	}
-	
+
+	/** Triggers level generation when Player gets higher */
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 			TransformComponent trans = tm.get(entity);

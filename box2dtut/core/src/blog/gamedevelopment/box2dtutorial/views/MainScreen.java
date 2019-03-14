@@ -35,10 +35,7 @@ public class MainScreen implements Screen {
 	//private Sound boing;
 	private Entity player;	
 
-	
-	/**
-	 * @param box2dTutorial
-	 */
+	/** Main frame of the game */
 	public MainScreen(Box2DTutorial box2dTutorial) {
 		parent = box2dTutorial;
 		parent.assMan.queueAddSounds();
@@ -89,6 +86,7 @@ public class MainScreen implements Screen {
 		Gdx.input.setInputProcessor(controller);	
 	}
 
+	/** Draws background and updates engine -> RenderSystem draws actual Level and Player */
 	@Override
 	public void render(float delta) {
 
@@ -96,7 +94,6 @@ public class MainScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		engine.update(delta);
-		
 		//check if player is dead. if so show end screen
 		PlayerComponent pc = (player.getComponent(PlayerComponent.class));
 		if(pc.hasScored){

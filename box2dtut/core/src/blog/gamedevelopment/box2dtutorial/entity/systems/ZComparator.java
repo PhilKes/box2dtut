@@ -13,6 +13,7 @@ public class ZComparator implements Comparator<Entity> {
     	cmTrans = ComponentMapper.getFor(TransformComponent.class);
     }
 
+    /** Sorts position by Z Position for renderQueue (see RenderSystem) */
     @Override
     public int compare(Entity entityA, Entity entityB) {
     	if(entityA == null || entityB == null){

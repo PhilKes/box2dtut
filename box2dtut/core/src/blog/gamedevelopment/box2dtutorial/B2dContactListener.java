@@ -17,7 +17,8 @@ public class B2dContactListener implements ContactListener {
 	public B2dContactListener(){ //B2dModel parent){
 		//this.parent = parent;
 	}
-	
+
+	/** Acknowledges collisions between Entities*/
 	@Override
 	public void beginContact(Contact contact) {
 		if(!contact.isEnabled())
@@ -37,7 +38,7 @@ public class B2dContactListener implements ContactListener {
 			return;
 		}
 	}
-
+	/** Sets Entity reference to collided Entity (gets reset after collision handling) */
 	private void entityCollision(Entity ent, Fixture fb) {
 		if(fb.getBody().getUserData() instanceof Entity){
 			Entity colEnt = (Entity) fb.getBody().getUserData();

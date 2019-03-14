@@ -30,6 +30,7 @@ public class PhysicsSystem extends IteratingSystem {
         this.bodiesQueue = new Array<Entity>();
     }
 
+    /** Updates entitys position, accelerations,... */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -38,7 +39,6 @@ public class PhysicsSystem extends IteratingSystem {
         if(accumulator >= MAX_STEP_TIME) {
             world.step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
-
             //Entity Queue
             for (Entity entity : bodiesQueue) {
                 TransformComponent tfm = tm.get(entity);

@@ -27,6 +27,7 @@ public class LevelFactory {
 								PLATFORM_WIDTH=6f,
 								PLATFORM_HEIGHT=2.7f;
 	public static final float SPRING_CLOUD_DUR=.35f;
+	public static int COLUMNS=2;
 
 	private BodyFactory bodyFactory;
 	public World world;
@@ -70,9 +71,7 @@ public class LevelFactory {
 		*/
 	}
 
-	/** Creates a pair of platforms per level up to yLevel
-	 * @param ylevel
-	 */
+	/** Generates level until y = ylevel */
 	public void generateLevel(int ylevel){
 		ComponentMapper<TypeComponent> tm= ComponentMapper.getFor(TypeComponent.class);
 		ComponentMapper<TransformComponent> trm= ComponentMapper.getFor(TransformComponent.class);
@@ -85,8 +84,9 @@ public class LevelFactory {
 				bodyFactory.removeBody(bm.get(entities.get(i)).body);
 			}
 		}
+		createBouncyPlatform(18,0.5f);
 		while(ylevel > currentLevel){
-	    	for(int i = 1; i < 5; i ++){
+	    	for(int i = 1; i < COLUMNS; i ++){
 		    	generateSingleColumn(i);
 	    	}
 	    	currentLevel++;
@@ -126,7 +126,8 @@ public class LevelFactory {
     		}*/
     	}
 	}
-	
+
+	/** Methods to create entities with all components */
 	public void createPlatform(float x, float y){
 		Entity entity = engine.createEntity();
 		B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
@@ -150,7 +151,6 @@ public class LevelFactory {
 		engine.addEntity(entity);
 		
 	}
-	
 	public Entity createBouncyPlatform(float x, float y){
 		Entity entity = engine.createEntity();
 		// create body component
@@ -337,7 +337,6 @@ public class LevelFactory {
 		
 		return entity;
 	}
-	
 	public Entity createPlayer(OrthographicCamera cam){
 	
 		Entity entity = engine.createEntity();
@@ -389,7 +388,6 @@ public class LevelFactory {
 		this.player = entity;
 		return entity;
 	}
-	
 	public void createWalls(TextureRegion tex){
 		
 		for(int i = 0; i < 2; i++){
@@ -418,8 +416,6 @@ public class LevelFactory {
 			engine.addEntity(entity);
 		}
 	}
-	
-	
 	/**
 	 * Creates the water entity that steadily moves upwards towards player
 	 * @return
