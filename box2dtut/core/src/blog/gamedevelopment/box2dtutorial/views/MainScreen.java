@@ -3,8 +3,10 @@ package blog.gamedevelopment.box2dtutorial.views;
 import blog.gamedevelopment.box2dtutorial.Box2DTutorial;
 import blog.gamedevelopment.box2dtutorial.DFUtils;
 import blog.gamedevelopment.box2dtutorial.LevelFactory;
+import blog.gamedevelopment.box2dtutorial.ParticleEffectManager;
 import blog.gamedevelopment.box2dtutorial.controller.KeyboardController;
 import blog.gamedevelopment.box2dtutorial.entity.components.PlayerComponent;
+import blog.gamedevelopment.box2dtutorial.entity.components.TransformComponent;
 import blog.gamedevelopment.box2dtutorial.entity.systems.*;
 
 import com.badlogic.ashley.core.Entity;
@@ -55,15 +57,19 @@ public class MainScreen implements Screen {
 		RenderingSystem renderingSystem = new RenderingSystem(sb,parent.assMan.manager.get("images/loading.atlas", TextureAtlas.class));
 		cam = renderingSystem.getCamera();
 		sb.setProjectionMatrix(cam.combined);
+		ParticleEffectSystem particleSystem = new ParticleEffectSystem(sb,cam);
 
         engine.addSystem(new PhysicsSystem(lvlFactory.world));
         engine.addSystem(renderingSystem);
+		engine.addSystem(particleSystem);
 		engine.addSystem(new SpringSystem());
         engine.addSystem(new CollisionSystem(soundBoard,soundSwish));
 		engine.addSystem(new AnimationSystem());
+		//engine.addSystem(new PhysicsDebugSystem(lvlFactory.world,cam));
         engine.addSystem(new SteeringSystem());
         engine.addSystem(new PlayerControlSystem(controller,lvlFactory, soundJump));
         player = lvlFactory.createPlayer(cam);
+		engine.addSystem(new BasketSystem(lvlFactory));
         //engine.addSystem(new EnemySystem(lvlFactory));
         engine.addSystem(new WallSystem(player));
         engine.addSystem(new WaterFloorSystem(player));
@@ -96,7 +102,9 @@ public class MainScreen implements Screen {
 		engine.update(delta);
 		//check if player is dead. if so show end screen
 		PlayerComponent pc = (player.getComponent(PlayerComponent.class));
+		TransformComponent tc=(player.getComponent(TransformComponent.class));
 		if(pc.hasScored){
+			//lvlFactory.makeParticleEffect(ParticleEffectManager.STAR,tc.position.x,tc.position.y);
 			parent.baskets++;
 			pc.hasScored=false;
 		}

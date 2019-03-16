@@ -14,7 +14,7 @@ public class ParticleEffectManager {
 	// DEFINE constants for particleEffects
 	public static final int SMOKE = 0;
 	public static final int WATER = 1;
-	public static final int FIRE = 2;
+	public static final int STAR= 2;
 
 	// create intmaps for effects and pools
 	private IntMap<ParticleEffect> partyEffects;

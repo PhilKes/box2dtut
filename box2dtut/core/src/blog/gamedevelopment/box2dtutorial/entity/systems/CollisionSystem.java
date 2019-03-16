@@ -1,7 +1,6 @@
 package blog.gamedevelopment.box2dtutorial.entity.systems;
 
 import blog.gamedevelopment.box2dtutorial.entity.components.*;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -78,9 +77,10 @@ public class CollisionSystem  extends IteratingSystem {
 						break;
 					case TypeComponent.BASKET:
 						TransformComponent basketTrans=collidedEntity.getComponent(TransformComponent.class);
-						if(thisTrans.position.y>basketTrans.position.y) {
+						if(thisTrans.position.y+1>basketTrans.position.y) {
 							System.out.println("SCORE");
 							pl.hasScored=true;
+							(collidedEntity.getComponent(BasketComponent.class)).wasHit=true;
 							soundSwish.play();
 							StateComponent state2=sm.get(collidedEntity);
 							state2.set(StateComponent.STATE_HIT);

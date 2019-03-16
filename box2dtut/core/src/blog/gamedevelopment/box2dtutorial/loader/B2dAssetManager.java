@@ -1,8 +1,10 @@
 package blog.gamedevelopment.box2dtutorial.loader;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
@@ -37,12 +39,12 @@ public class B2dAssetManager {
 		
 	}
 	
-	public void queueAddParticleEffects(){/*
-		ParticleEffectParameter pep = new ParticleEffectParameter();
+	public void queueAddParticleEffects(){
+		ParticleEffectLoader.ParticleEffectParameter pep = new ParticleEffectLoader.ParticleEffectParameter();
 		pep.atlasFile = "images/game.atlas";
 		manager.load(smokeEffect, ParticleEffect.class, pep);
 		manager.load(waterEffect, ParticleEffect.class, pep);
-		manager.load(fireEffect, ParticleEffect.class, pep);*/
+		manager.load(fireEffect, ParticleEffect.class, pep);
 	}
 	
 	public void queueAddImages(){

@@ -62,7 +62,7 @@ cloud
   index: -1
 enemy
   rotate: false
-  xy: 965, 973
+  xy: 723, 402
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -74,18 +74,32 @@ ground
   orig: 400, 400
   offset: 0, 0
   index: -1
-player
+particle
   rotate: false
-  xy: 723, 402
+  xy: 965, 973
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-test
+player
   rotate: false
-  xy: 563, 267
+  xy: 912, 703
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 563, 199
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+star2
+  rotate: false
+  xy: 563, 133
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 trampolin

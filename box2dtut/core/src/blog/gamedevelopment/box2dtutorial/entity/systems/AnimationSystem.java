@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AnimationSystem extends IteratingSystem {
 
@@ -35,7 +36,7 @@ public class AnimationSystem extends IteratingSystem {
 
         if(ani.animations.containsKey(state.get())){
             TextureComponent tex = tm.get(entity);
-            tex.region=ani.animations.get(state.get()).getKeyFrame(state.time, state.isLooping);
+            tex.region=(TextureRegion)ani.animations.get(state.get()).getKeyFrame(state.time, state.isLooping);
         }
 
         state.time += deltaTime;

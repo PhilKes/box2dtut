@@ -203,7 +203,7 @@ public class LoadingScreen implements Screen {
 		public void act(float delta) {
 			super.act(delta);
 			stateTime += delta; // Accumulate elapsed animation time
-	        currentFrame = flameAnimation.getKeyFrame(stateTime, true);
+	        currentFrame = (TextureRegion)flameAnimation.getKeyFrame(stateTime, true);
 		}
 		
 	}

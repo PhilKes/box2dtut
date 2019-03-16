@@ -6,9 +6,12 @@ import blog.gamedevelopment.box2dtutorial.entity.components.ParticleEffectCompon
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+
+import static com.badlogic.gdx.Gdx.gl;
 
 public class ParticleEffectSystem extends IteratingSystem{
 
@@ -33,6 +36,7 @@ public class ParticleEffectSystem extends IteratingSystem{
 		batch.setProjectionMatrix(camera.combined);
         batch.enableBlending();
         // Render PE
+		gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         if(shouldRender){
 	        batch.begin();
 	        for (Entity entity : renderQueue) {

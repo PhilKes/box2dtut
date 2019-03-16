@@ -28,7 +28,6 @@ public class Box2DTutorial extends Game {
 	
 	public int lastScore = 0;
 	public int baskets=0;
-	
 	@Override
 	public void create () {
 		loadingScreen = new LoadingScreen(this);

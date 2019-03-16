@@ -1,11 +1,9 @@
 package blog.gamedevelopment.box2dtutorial.entity.systems;
 
-import blog.gamedevelopment.box2dtutorial.DFUtils;
 import blog.gamedevelopment.box2dtutorial.LevelFactory;
 import blog.gamedevelopment.box2dtutorial.ParticleEffectManager;
 import blog.gamedevelopment.box2dtutorial.controller.KeyboardController;
 import blog.gamedevelopment.box2dtutorial.entity.components.B2dBodyComponent;
-import blog.gamedevelopment.box2dtutorial.entity.components.BulletComponent;
 import blog.gamedevelopment.box2dtutorial.entity.components.PlayerComponent;
 import blog.gamedevelopment.box2dtutorial.entity.components.StateComponent;
 
@@ -15,8 +13,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 public class PlayerControlSystem extends IteratingSystem{
 
@@ -65,7 +61,7 @@ public class PlayerControlSystem extends IteratingSystem{
 			b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x,0);
 			b2body.body.applyLinearImpulse(0, 100f, b2body.body.getWorldCenter().x,b2body.body.getWorldCenter().y, true);
 			//add particle effect at feet
-			//lvlFactory.makeParticleEffect(ParticleEffectManager.SMOKE, b2body.body.getPosition().x, b2body.body.getPosition().y);
+			lvlFactory.makeParticleEffect(ParticleEffectManager.STAR, b2body.body.getPosition().x, b2body.body.getPosition().y);
 			// move player
 			//b2body.body.setTransform(b2body.body.getPosition().x, b2body.body.getPosition().y+ 10, b2body.body.getAngle());
 			state.set(StateComponent.STATE_JUMPING);

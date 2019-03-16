@@ -4,23 +4,20 @@ import blog.gamedevelopment.box2dtutorial.ai.SteeringPresets;
 import blog.gamedevelopment.box2dtutorial.entity.components.*;
 import blog.gamedevelopment.box2dtutorial.loader.B2dAssetManager;
 import blog.gamedevelopment.box2dtutorial.simplexnoise.OpenSimplexNoise;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
-import com.badlogic.gdx.ai.steer.behaviors.Seek;
-import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-
-import java.util.Map;
 
 public class LevelFactory {
 	public static final float PLAYER_RADIUS=2f,
@@ -28,6 +25,7 @@ public class LevelFactory {
 								PLATFORM_HEIGHT=2.7f;
 	public static final float SPRING_CLOUD_DUR=.35f;
 	public static int COLUMNS=2;
+	private final ParticleEffectManager pem;
 
 	private BodyFactory bodyFactory;
 	public World world;
@@ -64,11 +62,11 @@ public class LevelFactory {
 	
 		openSim = new OpenSimplexNoise(MathUtils.random(2000l));
 				
-		/*pem = new ParticleEffectManager();
-		pem.addParticleEffect(ParticleEffectManager.FIRE, assMan.manager.get("particles/fire.pe",ParticleEffect.class),1f/128f);
-		pem.addParticleEffect(ParticleEffectManager.WATER, assMan.manager.get("particles/water.pe",ParticleEffect.class),1f/8f);
-		pem.addParticleEffect(ParticleEffectManager.SMOKE, assMan.manager.get("particles/smoke.pe",ParticleEffect.class),1f/64f);
-		*/
+		pem = new ParticleEffectManager();
+		pem.addParticleEffect(ParticleEffectManager.STAR, assMan.manager.get("particles/fire.pe",ParticleEffect.class),1f/50);
+		pem.addParticleEffect(ParticleEffectManager.WATER, assMan.manager.get("particles/water.pe",ParticleEffect.class),1f);
+		pem.addParticleEffect(ParticleEffectManager.SMOKE, assMan.manager.get("particles/smoke.pe",ParticleEffect.class),1f);
+
 	}
 
 	/** Generates level until y = ylevel */
@@ -77,8 +75,12 @@ public class LevelFactory {
 		ComponentMapper<TransformComponent> trm= ComponentMapper.getFor(TransformComponent.class);
 		ComponentMapper<B2dBodyComponent> bm= ComponentMapper.getFor(B2dBodyComponent.class);
 		ImmutableArray<Entity> entities=engine.getEntities();
+
 		for(int i=0; i<entities.size(); i++) {
-			if((tm.get(entities.get(i)).type==TypeComponent.SPRING || tm.get(entities.get(i)).type==TypeComponent.PLATFORM)
+			TypeComponent type=tm.get(entities.get(i));
+			if(type==null)
+				continue;
+			if((type.type==TypeComponent.SPRING || type.type==TypeComponent.PLATFORM)
 					&& trm.get(entities.get(i)).position.y<currentLevel-21){
 				engine.removeEntity(entities.get(i));
 				bodyFactory.removeBody(bm.get(entities.get(i)).body);
@@ -199,55 +201,54 @@ public class LevelFactory {
 		return entity;
 	}
 	public Entity createBasket(float x, float y){
-		{
-			Entity entity=engine.createEntity();
-			TransformComponent position=engine.createComponent(TransformComponent.class);
-			position.position.set(x-2.25f, y+1.1f, 0);
-			position.width=8;
-			position.height=8;
-			//make it a sensor so not to impede movement
-			//bodyFactory.makeAllFixturesSensors(b2dbody.body);
+		/** Board **/
+		Entity entity2=engine.createEntity();
+		TransformComponent position3=engine.createComponent(TransformComponent.class);
+		position3.position.set(x-2.25f, y+1.1f, 0);
+		position3.width=8;
+		position3.height=8;
 
-			TextureComponent texture=engine.createComponent(TextureComponent.class);
-			//texture.region= ringTex;
-			texture.region= basketTex;
+		TextureComponent texture2=engine.createComponent(TextureComponent.class);
+		texture2.region= basketTex;
 
-			//DFUtils.makeTextureRegion((int)(.5f*RenderingSystem.PPM),(int)(.5f*RenderingSystem.PPM), "221122FF");
-			TypeComponent type=engine.createComponent(TypeComponent.class);
-			type.type=TypeComponent.SCENERY;
+		TypeComponent type2=engine.createComponent(TypeComponent.class);
+		type2.type=TypeComponent.SCENERY;
 
-			entity.add(texture);
-			entity.add(type);
-			entity.add(position);
-			engine.addEntity(entity);
-		}
-		Entity entity = engine.createEntity();
-		// create body component
+		entity2.add(texture2);
+		entity2.add(type2);
+		entity2.add(position3);
+		engine.addEntity(entity2);
+
+		/** Basket Collision Boxes **/
+		Entity entity1=engine.createEntity();
 
 		B2dBodyComponent b2dbody3 = engine.createComponent(B2dBodyComponent.class);
 		b2dbody3.body = bodyFactory.makeBoxPolyBody(x-3.5f, y+1, .3f, .5f, BodyFactory.STONE, BodyType.StaticBody);
-		//bodyFactory.makeAllFixturesSensors(b2dbody3.body);
-
-		B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
-		b2dbody.body = bodyFactory.makeBoxPolyBody(x-1f, y+1, .3f, .5f, BodyFactory.STONE, BodyType.StaticBody);
-		//bodyFactory.makeAllFixturesSensors(b2dbody.body);
-
-		Entity entity1=engine.createEntity();
-		b2dbody.body.setUserData(entity1);
 		b2dbody3.body.setUserData(entity1);
-		entity1.add(b2dbody);
-		entity1.add(b2dbody3);
+
 		TypeComponent typeComponent=engine.createComponent(TypeComponent.class);
 		typeComponent.type=TypeComponent.BOARD;
+
 		TransformComponent position = engine.createComponent(TransformComponent.class);
 		position.position.set(x-2.2f,y,2);
 		position.width=3;position.height=3;
 
-		entity1.add(typeComponent);
 		entity1.add(position);
+		entity1.add(b2dbody3);
+		entity1.add(typeComponent);
 		engine.addEntity(entity1);
 
+		Entity entity3=engine.createEntity();
+		B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
+		b2dbody.body = bodyFactory.makeBoxPolyBody(x-1f, y+1, .3f, .5f, BodyFactory.STONE, BodyType.StaticBody);
+		b2dbody.body.setUserData(entity1);
+		entity3.add(b2dbody);
+		entity3.add(typeComponent);
+		entity3.add(position);
+		engine.addEntity(entity3);
 
+		/** Net (Triggers Score) **/
+		Entity entity = engine.createEntity();
 		B2dBodyComponent b2dbody2 = engine.createComponent(B2dBodyComponent.class);
 		b2dbody2.body = bodyFactory.makeBoxPolyBody(x-2.2f, y-.2f, 2f, 2f, BodyFactory.STONE, BodyType.StaticBody);
 		bodyFactory.makeAllFixturesSensors(b2dbody2.body);
@@ -278,6 +279,11 @@ public class LevelFactory {
 		TextureComponent texture=engine.createComponent(TextureComponent.class);
 		texture.region=ringTex;
 
+		BasketComponent bc=engine.createComponent(BasketComponent.class);
+		bc.wasHit=false;
+		bc.entities.add(entity1);bc.entities.add(entity2);bc.entities.add(entity3);
+
+		entity.add(bc);
 		entity.add(b2dbody2);
 		entity.add(animCom);
 		entity.add(stateCom);
@@ -416,10 +422,6 @@ public class LevelFactory {
 			engine.addEntity(entity);
 		}
 	}
-	/**
-	 * Creates the water entity that steadily moves upwards towards player
-	 * @return
-	 */
 	public Entity createWaterFloor(){
 		Entity entity = engine.createEntity();
 		B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
@@ -478,7 +480,7 @@ public class LevelFactory {
 		bul.yVel = yVel;
 		/*
 		//attach party to bullet
-		bul.particleEffect = makeParticleEffect(ParticleEffectManager.FIRE,b2dbody);
+		bul.particleEffect = makeParticleEffect(ParticleEffectManager.STAR,b2dbody);
 		
 		entity.add(bul);*/
 		entity.add(colComp);
@@ -496,39 +498,45 @@ public class LevelFactory {
 		return entity;
 	}
 
-	/*public Entity makeParticleEffect(int type, float x, float y){
+	public Entity makeParticleEffect(int type, float x, float y){
 		Entity entPE = engine.createEntity();
 		ParticleEffectComponent pec = engine.createComponent(ParticleEffectComponent.class);
 		pec.particleEffect = pem.getPooledParticleEffect(type);
 		pec.particleEffect.setPosition(x, y);
+		pec.particleEffect.getEmitters().first().setContinuous(false);
 		entPE.add(pec);
 		engine.addEntity(entPE);
 		return entPE;
-	}*/
+	}
 	
 
-	/*public Entity makeParticleEffect(int type, B2dBodyComponent b2dbody){
+	public Entity makeParticleEffect(int type, B2dBodyComponent b2dbody){
 		return makeParticleEffect(type,b2dbody,0,0);
-	}*/
+	}
 	
 
-	/*public Entity makeParticleEffect(int type, B2dBodyComponent b2dbody, float xo, float yo){
+	public Entity makeParticleEffect(int type, B2dBodyComponent b2dbody, float xo, float yo){
 		Entity entPE = engine.createEntity();
 		ParticleEffectComponent pec = engine.createComponent(ParticleEffectComponent.class);
 		pec.particleEffect = pem.getPooledParticleEffect(type);
 		pec.particleEffect.setPosition(b2dbody.body.getPosition().x, b2dbody.body.getPosition().y);
-		pec.particleEffect.getEmitters().first().setAttached(true); //manually attach for testing
+		//pec.particleEffect.getEmitters().first().setAttached(true); //manually attach for testing
 		pec.xOffset = xo;
 		pec.yOffset = yo;
+		//pec.timeTilDeath=1f;
 		pec.isattached = true;
-		pec.particleEffect.getEmitters().first().setContinuous(true);
+		pec.particleEffect.getEmitters().first().setContinuous(false);
 		pec.attachedBody = b2dbody.body;
 		entPE.add(pec);
 		engine.addEntity(entPE);
 		return entPE;
-	}*/
+	}
 	
 	public void removeEntity(Entity ent){
+		B2dBodyComponent b2b=ent.getComponent(B2dBodyComponent.class);
+		if(b2b!=null) {
+			bodyFactory.removeBody(b2b.body);
+		}
 		engine.removeEntity(ent);
 	}
 
